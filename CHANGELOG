@@ -1,0 +1,6 @@
+## X.X.X / 2018-XX-XX
+
+* [FEATURE] Add predefined handler label.
+* [FEATURE] Add URL infered handler label.
+* [FEATURE] Add HTTP latency requests.
+* [FEATURE] Add middleware.
