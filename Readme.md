@@ -26,10 +26,12 @@ func main() {
 	})
 	h := mdlw.Handler("", myHandler)
 
-	// Serve metrics.
+    // Serve metrics.
+    log.Printf("serving metrics at: %s", ":9090")
 	go http.ListenAndServe(":9090", promhttp.Handler())
 
-	// Serve our handler.
+    // Serve our handler.
+    log.Printf("listening at: %s", ":8080")
 	if err := http.ListenAndServe(":8080", h); err != nil {
 		log.Panicf("error while serving: %s", err)
 	}
