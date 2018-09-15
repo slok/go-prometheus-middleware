@@ -8,33 +8,33 @@ This middleware will measure the [RED] metrics of a Go net/http handler in a eff
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	prommiddleware "github.com/slok/go-prometheus-middleware"
+    "github.com/prometheus/client_golang/prometheus/promhttp"
+    prommiddleware "github.com/slok/go-prometheus-middleware"
 )
 
 func main() {
-	// Create our middleware.
-	mdlw := prommiddleware.NewDefault()
+    // Create our middleware.
+    mdlw := prommiddleware.NewDefault()
 
-	// Our handler.
-	myHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("hello world!"))
-	})
-	h := mdlw.Handler("", myHandler)
+    // Our handler.
+    myHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        w.Write([]byte("hello world!"))
+    })
+    h := mdlw.Handler("", myHandler)
 
     // Serve metrics.
     log.Printf("serving metrics at: %s", ":9090")
-	go http.ListenAndServe(":9090", promhttp.Handler())
+    go http.ListenAndServe(":9090", promhttp.Handler())
 
     // Serve our handler.
     log.Printf("listening at: %s", ":8080")
-	if err := http.ListenAndServe(":8080", h); err != nil {
-		log.Panicf("error while serving: %s", err)
-	}
+    if err := http.ListenAndServe(":8080", h); err != nil {
+        log.Panicf("error while serving: %s", err)
+    }
 }
 ```
 
@@ -62,14 +62,14 @@ Get the request error rate:
 rate(http_request_duration_seconds_count{code=~"5.."}[30s])
 ```
 
-Get percentile 99% of the whole service:
+Get percentile 99 of the whole service:
 
 ```text
 histogram_quantile(0.99,
     rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-Get percentile 90% of each handler:
+Get percentile 90 of each handler:
 
 ```text
 histogram_quantile(0.9,
