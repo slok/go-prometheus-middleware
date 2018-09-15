@@ -13,7 +13,7 @@ import (
 
 const (
 	srvAddr     = ":8080"
-	metricsAddr = ":9090"
+	metricsAddr = ":8081"
 )
 
 // this example will show the simplest way of enabling the middleware
