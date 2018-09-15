@@ -14,6 +14,9 @@ integration-test:
 .PHONY: test
 test: integration-test
 
+.PHONY: ci
+ci: test
+
 .PHONY: godoc
 godoc: 
 	godoc -http=":6060"
