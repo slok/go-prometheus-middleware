@@ -40,6 +40,45 @@ func main() {
 
 For more examples check the the [examples]
 
+## Metrics
+
+The metrics obtained with this middleware are the [most important ones][red] for a HTTP service.
+
+The middleware will measure the latency seconds of the requests using a histogram (latency), this will give us also the number of requests (rate), and the metric has the status codes (error rate):
+
+### Query examples
+
+Get the request rate by handler:
+
+```text
+sum(
+    rate(http_request_duration_seconds_count[30s])
+) by (handler)
+```
+
+Get the request error rate:
+
+```text
+rate(http_request_duration_seconds_count{code=~"5.."}[30s])
+```
+
+Get percentile 99% of the whole service:
+
+```text
+histogram_quantile(0.99,
+    rate(http_request_duration_seconds_bucket[5m]))
+```
+
+Get percentile 90% of each handler:
+
+```text
+histogram_quantile(0.9,
+    sum(
+        rate(http_request_duration_seconds_bucket[10m])
+    ) by (handler, le)
+)
+```
+
 ## Options
 
 One of the options that you need to pass when wrapping the handler with the middleware is `handlerID`, this has 2 working ways.
@@ -51,6 +90,11 @@ One of the options that you need to pass when wrapping the handler with the midd
 There are different parameters to set up your middleware factory, you can check everything on the [docs] and see the usage in the [examples].
 
 ## Benchmarks
+
+```text
+BenchmarkMiddlewareHandler/benchmark_with_URL-4                     1000000     1689 ns/op  320 B/op    6 allocs/op
+BenchmarkMiddlewareHandler/benchmark_with_predefined_handler_ID-4   1000000     1849 ns/op  320 B/op    6 allocs/op
+```
 
 [travis-image]: https://travis-ci.org/slok/go-prometheus-middleware.svg?branch=master
 [travis-url]: https://travis-ci.org/slok/go-prometheus-middleware

@@ -1,6 +1,7 @@
 
-UNIT_TEST_CMD := go test -v
-INTEGRATION_TEST_CMD := go test -v -tags='integration'
+UNIT_TEST_CMD := go test -race -v
+INTEGRATION_TEST_CMD := go test -race -v -tags='integration'
+BENCHMARK_CMD :=  go test -benchmem -bench=.
 
 .PHONY: default
 default: test
@@ -13,6 +14,10 @@ integration-test:
 	$(INTEGRATION_TEST_CMD)
 .PHONY: test
 test: integration-test
+
+.PHONY: benchmark
+benchmark:
+	$(BENCHMARK_CMD)
 
 .PHONY: ci
 ci: test
