@@ -1,4 +1,4 @@
-# go-prometheus-middleware
+# go-prometheus-middleware [![Build Status][travis-image]][travis-url] [![Go Report Card][goreport-image]][goreport-url] [![GoDoc][godoc-image]][godoc-url]
 
 This middleware will measure the [RED] metrics of a Go net/http handler in a efficent way.
 
@@ -52,6 +52,12 @@ There are different parameters to set up your middleware factory, you can check 
 
 ## Benchmarks
 
+[travis-image]: https://travis-ci.org/slok/go-prometheus-middleware.svg?branch=master
+[travis-url]: https://travis-ci.org/slok/go-prometheus-middleware
+[goreport-image]: https://goreportcard.com/badge/github.com/slok/go-prometheus-middleware
+[goreport-url]: https://goreportcard.com/report/github.com/slok/go-prometheus-middleware
+[godoc-image]: https://godoc.org/github.com/slok/go-prometheus-middleware?status.svg
+[godoc-url]: https://godoc.org/github.com/slok/go-prometheus-middleware
 [docs]: https://godoc.org/github.com/slok/go-prometheus-middleware
 [examples]: examples/
 [red]: https://www.weave.works/blog/the-red-method-key-metrics-for-microservices-architecture/
