@@ -1,6 +1,6 @@
 # go-prometheus-middleware
 
-This middleware will measure the request latency of the different handlers.
+This middleware will measure the [RED] metrics of a Go net/http handler in a efficent way.
 
 ## Getting Started
 
@@ -50,5 +50,6 @@ There are different parameters to set up your middleware factory, you can check 
 
 ## Benchmarks
 
-[docs]: http://godoc.org/github.com/slok/go-prometheus-middleware
+[docs]: https://godoc.org/github.com/slok/go-prometheus-middleware
 [examples]: examples/
+[red]: https://www.weave.works/blog/the-red-method-key-metrics-for-microservices-architecture/
