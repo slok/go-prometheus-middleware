@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,6 +16,12 @@ type Config struct {
 	// Buckets are the buckets used by Prometheus for the HTTP request metrics, by default
 	// Uses Prometheus default buckets (from 5ms to 10s).
 	Buckets []float64
+	// GroupedStatus will group the status label in the form of `\dxx` for, for example,
+	// 200, 201, and 203 will have the label `code="2xx"`. This impacts on the cardinality
+	// of the metrics and also improves the performance of queries that are grouped by
+	// status code because there are already aggregated in the metric.
+	// By default will be false.
+	GroupedStatus bool
 }
 
 func (c *Config) validate() {
@@ -38,6 +45,7 @@ type Middleware interface {
 type middleware struct {
 	httpRequestHistogram *prometheus.HistogramVec
 
+	cfg Config
 	reg prometheus.Registerer
 }
 
@@ -68,6 +76,7 @@ func New(cfg Config, reg prometheus.Registerer) Middleware {
 			Buckets:   cfg.Buckets,
 		}, []string{"handler", "method", "code"}),
 
+		cfg: cfg,
 		reg: reg,
 	}
 
@@ -104,7 +113,17 @@ func (m *middleware) Handler(handlerID string, h http.Handler) http.Handler {
 		start := time.Now()
 		defer func() {
 			duration := time.Since(start).Seconds()
-			m.httpRequestHistogram.WithLabelValues(hid, r.Method, strconv.Itoa(wi.statusCode)).Observe(duration)
+
+			// If we need to group the status code we, group
+			// by using the status code first number.
+			var code string
+			if m.cfg.GroupedStatus {
+				code = fmt.Sprintf("%dxx", wi.statusCode/100)
+			} else {
+				code = strconv.Itoa(wi.statusCode)
+			}
+
+			m.httpRequestHistogram.WithLabelValues(hid, r.Method, code).Observe(duration)
 		}()
 
 		h.ServeHTTP(wi, r)
