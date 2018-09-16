@@ -81,6 +81,28 @@ histogram_quantile(0.9,
 
 ## Options
 
+### Factory options
+
+The factory options are the ones that are passed in the moment of creating the middleware factory using the `Config` object.
+
+#### Prefix
+
+This option will make exposed metrics have a `{PREFIX}_` in fornt of the metric. For example if a regular exposed metric is `http_request_duration_seconds_count` and I use `Prefix: batman` my exposed metric will be `batman_http_request_duration_seconds_count`. By default this will be disabled or empty, but can be useful if all the metrics of the app are prefixed with the app name.
+
+#### Buckets
+
+Buckets are the buckets used for the histogram metric, by default it will use Prometheus defaults, this is from 5ms to 10s, on a regular HTTP service this is very common and in most cases this default works perfect, but on some cases where the latency is very low or very high due the nature of the service, this could be changed to measure a different range of time. Example, from 500ms to 320s `Buckets: []float64{.5, 1, 2.5, 5, 10, 20, 40, 80, 160, 320}`. Is not adviced to use more than 10 buckets.
+
+#### GroupedStatus
+
+Storing all the status codes could increase the cardinality of the metrics, usually this is not a common case because the used status codes by a service are not too much and are finite, but some services use a lot of different status codes, grouping the status on the `\dxx` form could impact the performance (in a good way) of the queries on Prometheus (as they are already aggregated), on the other hand it losses detail. For example the metrics code `code="401"`, `code="404"`, `code="403"` with this enabled option would end being `code="4xx"` label. By default is disabled.
+
+### Wrapper options
+
+The wrapper options are the ones passed in the moment of creating the wrapper middleware using the factory `Middleware`.
+
+#### handlerID
+
 One of the options that you need to pass when wrapping the handler with the middleware is `handlerID`, this has 2 working ways.
 
 - If an empty string is passed `mdwr.Handler("", h)` it will get the `handler` label from the url path. This will create very high cardnialty on the metrics because `/p/123/dashboard/1`, `/p/123/dashboard/2` and `/p/9821/dashboard/1` would have different `handler` labels. **This method is only recomended when the URLs are fixed (not dynamic or don't have parameters on the path)**.

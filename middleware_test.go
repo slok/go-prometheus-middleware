@@ -95,8 +95,8 @@ func TestMiddlewareHandler(t *testing.T) {
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="GET",le="160"} 1`,
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="GET",le="320"} 1`,
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="GET",le="+Inf"} 1`,
-
 				`batman_http_request_duration_seconds_count{code="201",handler="bruceWayne",method="GET"} 1`,
+
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="POST",le="0.5"} 1`,
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="POST",le="1"} 1`,
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="POST",le="2.5"} 1`,
@@ -109,6 +109,33 @@ func TestMiddlewareHandler(t *testing.T) {
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="POST",le="320"} 1`,
 				`batman_http_request_duration_seconds_bucket{code="201",handler="bruceWayne",method="POST",le="+Inf"} 1`,
 				`batman_http_request_duration_seconds_count{code="201",handler="bruceWayne",method="POST"} 1`,
+			},
+		},
+		{
+			name: "default configuration with grouped status code should group the code label.",
+			config: prommiddleware.Config{
+				GroupedStatus: true,
+			},
+			handlerID:  "",
+			statusCode: 301,
+			requests: func(h http.Handler) {
+				r := httptest.NewRequest("GET", "/test", nil)
+				h.ServeHTTP(httptest.NewRecorder(), r)
+			},
+			expMetrics: []string{
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.005"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.01"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.025"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.05"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.1"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.25"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="0.5"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="1"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="2.5"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="5"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="10"} 1`,
+				`http_request_duration_seconds_bucket{code="3xx",handler="/test",method="GET",le="+Inf"} 1`,
+				`http_request_duration_seconds_count{code="3xx",handler="/test",method="GET"} 1`,
 			},
 		},
 	}
@@ -148,14 +175,23 @@ func BenchmarkMiddlewareHandler(b *testing.B) {
 	benchs := []struct {
 		name      string
 		handlerID string
+		cfg       prommiddleware.Config
 	}{
 		{
-			name:      "benchmark with URL",
+			name:      "benchmark with default settings.",
 			handlerID: "",
+			cfg:       prommiddleware.Config{},
+		},
+		{
+			name: "benchmark with grouped status code.",
+			cfg: prommiddleware.Config{
+				GroupedStatus: true,
+			},
 		},
 		{
 			name:      "benchmark with predefined handler ID",
 			handlerID: "benchmark1",
+			cfg:       prommiddleware.Config{},
 		},
 	}
 
@@ -163,7 +199,7 @@ func BenchmarkMiddlewareHandler(b *testing.B) {
 		b.Run(bench.name, func(b *testing.B) {
 			// Prepare.
 			reg := prometheus.NewRegistry()
-			m := prommiddleware.New(prommiddleware.Config{}, reg)
+			m := prommiddleware.New(bench.cfg, reg)
 			h := m.Handler(bench.handlerID, getFakeHandler(200))
 			r := httptest.NewRequest("GET", "/test", nil)
 
