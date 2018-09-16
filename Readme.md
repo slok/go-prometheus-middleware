@@ -1,6 +1,6 @@
 # go-prometheus-middleware [![Build Status][travis-image]][travis-url] [![Go Report Card][goreport-image]][goreport-url] [![GoDoc][godoc-image]][godoc-url]
 
-This middleware will measure the [RED] metrics of a Go net/http handler in a efficent way.
+This middleware will measure metrics of a Go net/http handler in Prometheus format. The metrics measured are based on [RED] and/or [Four golden signals] and try to be measured in a efficent way.
 
 ## Getting Started
 
@@ -105,3 +105,4 @@ BenchmarkMiddlewareHandler/benchmark_with_predefined_handler_ID-4   1000000     
 [docs]: https://godoc.org/github.com/slok/go-prometheus-middleware
 [examples]: examples/
 [red]: https://www.weave.works/blog/the-red-method-key-metrics-for-microservices-architecture/
+[four golden signals]: https://landing.google.com/sre/book/chapters/monitoring-distributed-systems.html#xref_monitoring_golden-signals
