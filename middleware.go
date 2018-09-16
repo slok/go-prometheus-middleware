@@ -1,3 +1,7 @@
+// Package middleware will measure metrics of a Go net/http
+// handler in Prometheus format.
+// The metrics measured are based on RED and/or Four golden signals and
+// try to be measured in a efficent way.
 package middleware
 
 import (
