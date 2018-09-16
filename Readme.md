@@ -1,6 +1,8 @@
 # go-prometheus-middleware [![Build Status][travis-image]][travis-url] [![Go Report Card][goreport-image]][goreport-url] [![GoDoc][godoc-image]][godoc-url]
 
-This middleware will measure metrics of a Go net/http handler in Prometheus format. The metrics measured are based on [RED] and/or [Four golden signals] and try to be measured in a efficent way.
+This middleware will measure metrics of a Go net/http handler in Prometheus format. The metrics measured are based on [RED] and/or [Four golden signals], follow standards and try to be measured in a efficent way.
+
+If you are using a framework instead of go `net/http` library, do not worry, there are multiple helpers available to get middlewares fo the most used http Go frameworks.
 
 ## Getting Started
 
@@ -111,6 +113,14 @@ One of the options that you need to pass when wrapping the handler with the midd
 
 There are different parameters to set up your middleware factory, you can check everything on the [docs] and see the usage in the [examples].
 
+## Frameworks
+
+The middleware is mainly focused to be compatible with Go std library using http.Handler, but it comes with helpers to get middlewares for other frameworks or libraries.
+
+**The different helpers are on separate packages so when you import the project it doesn't import other framework packages and dependencies, for example if I don't use Negroni and instenad I use std go net/http, it wouldn't be nice to import Negroni on my project.**
+
+- [Negroni][negroni-example]
+
 ## Benchmarks
 
 ```text
@@ -128,3 +138,4 @@ BenchmarkMiddlewareHandler/benchmark_with_predefined_handler_ID-4   1000000     
 [examples]: examples/
 [red]: https://www.weave.works/blog/the-red-method-key-metrics-for-microservices-architecture/
 [four golden signals]: https://landing.google.com/sre/book/chapters/monitoring-distributed-systems.html#xref_monitoring_golden-signals
+[negroni-example]: examples/negroni
