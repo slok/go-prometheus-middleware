@@ -2,7 +2,7 @@
 
 This middleware will measure metrics of a Go net/http handler in Prometheus format. The metrics measured are based on [RED] and/or [Four golden signals], follow standards and try to be measured in a efficent way.
 
-If you are using a framework instead of go `net/http` library, do not worry, there are multiple helpers available to get middlewares fo the most used http Go frameworks.
+If you are using a framework that isn't directly compatible with go's `http.Handler` interface from the std library, do not worry, there are multiple helpers available to get middlewares fo the most used http Go frameworks.
 
 ## Getting Started
 
@@ -40,7 +40,7 @@ func main() {
 }
 ```
 
-For more examples check the the [examples]
+For more examples check the the [examples]. [default][default-example] and [custom][custom-example] are the examples for Go net/http std library users.
 
 ## Metrics
 
@@ -120,6 +120,7 @@ The middleware is mainly focused to be compatible with Go std library using http
 **The different helpers are on separate packages so when you import the project it doesn't import other framework packages and dependencies, for example if I don't use Negroni and instenad I use std go net/http, it wouldn't be nice to import Negroni on my project.**
 
 - [Negroni][negroni-example]
+- [Gin][gin-example]
 
 ## Benchmarks
 
@@ -138,4 +139,7 @@ BenchmarkMiddlewareHandler/benchmark_with_predefined_handler_ID-4   1000000     
 [examples]: examples/
 [red]: https://www.weave.works/blog/the-red-method-key-metrics-for-microservices-architecture/
 [four golden signals]: https://landing.google.com/sre/book/chapters/monitoring-distributed-systems.html#xref_monitoring_golden-signals
+[default-example]: examples/default
+[custom-example]: examples/custom
 [negroni-example]: examples/negroni
+[gin-example]: examples/gin
