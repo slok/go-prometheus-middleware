@@ -1,5 +1,6 @@
 ## 0.x.x / 2018-xx-xx
 
+* [FEATURE] Add Gin compatible middleware.
 * [FEATURE] Add Negroni compatible middleware.
 * [FEATURE] Add option to group by status codes.
 
