@@ -117,7 +117,7 @@ There are different parameters to set up your middleware factory, you can check 
 
 The middleware is mainly focused to be compatible with Go std library using http.Handler, but it comes with helpers to get middlewares for other frameworks or libraries.
 
-**The different helpers are on separate packages so when you import the project it doesn't import other framework packages and dependencies, for example if I don't use Negroni and instenad I use std go net/http, it wouldn't be nice to import Negroni on my project.**
+**The different helpers are on separate packages so when you import the project it doesn't import other framework packages and dependencies, for example if I don't use Negroni and instead I use std go net/http, it wouldn't be nice to import Negroni on my project.**
 
 - [Negroni][negroni-example]
 - [Gin][gin-example]
