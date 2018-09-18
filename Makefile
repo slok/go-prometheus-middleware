@@ -2,6 +2,7 @@
 UNIT_TEST_CMD := go test -race -v
 INTEGRATION_TEST_CMD := go test -race -v -tags='integration'
 BENCHMARK_CMD :=  go test -benchmem -bench=.
+DEPS_CMD := GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor
 
 .PHONY: default
 default: test
@@ -21,6 +22,10 @@ benchmark:
 
 .PHONY: ci
 ci: test
+
+.PHONY: deps
+deps:
+	$(DEPS_CMD)
 
 .PHONY: godoc
 godoc: 
