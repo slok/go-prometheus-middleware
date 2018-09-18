@@ -121,6 +121,7 @@ The middleware is mainly focused to be compatible with Go std library using http
 
 - [Negroni][negroni-example]
 - [Gin][gin-example]
+- [httprouter][httprouter-example]
 
 ## Benchmarks
 
@@ -143,3 +144,4 @@ BenchmarkMiddlewareHandler/benchmark_with_predefined_handler_ID-4   1000000     
 [custom-example]: examples/custom
 [negroni-example]: examples/negroni
 [gin-example]: examples/gin
+[httprouter-example]: examples/httprouter
