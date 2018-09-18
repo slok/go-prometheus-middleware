@@ -1,4 +1,4 @@
-// Package negroni Is a helper package to get a negroni compatible
+// Package negroni is a helper package to get a negroni compatible
 // handler/middleware from the standatd net/http Middleware factory
 // (from github.com/slok/go-prometheus-middleware).
 package negroni
