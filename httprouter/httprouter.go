@@ -12,7 +12,7 @@ import (
 )
 
 // Handler returns a httprouter.Handler compatible middleware from a Middleware factory instance.
-// The first HandlerID argument is the same argument passed on Middleware.Handler method.
+// The first handlerID argument is the same argument passed on Middleware.Handler method.
 // The second argument is the handler that wants to be wrapped.
 func Handler(handlerID string, next httprouter.Handle, m prommiddleware.Middleware) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {

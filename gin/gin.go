@@ -12,7 +12,7 @@ import (
 )
 
 // Handler returns a gin compatible middleware from a Middleware factory instance.
-// The first HandlerID argument is the same argument passed on Middleware.Handler method.
+// The first handlerID argument is the same argument passed on Middleware.Handler method.
 func Handler(handlerID string, m prommiddleware.Middleware) gin.HandlerFunc {
 	return gin.HandlerFunc(func(ctx *gin.Context) {
 		// Create a dummy handler to wrap the middleware chain of gin, this way Middleware
